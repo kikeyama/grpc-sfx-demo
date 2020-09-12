@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package pb;
+
+// The demo service definition.
+service Demo {
+  // request demo message
+  rpc GetMessageService (DemoRequest) returns (DemoReply) {}
+}
+
+// empty request
+message EmptyRequest {}
+
+// request message
+message DemoRequest {
+	string name = 1;
+}
+
+// reqponse meesage
+message DemoReply {
+  string message = 1;
+}
