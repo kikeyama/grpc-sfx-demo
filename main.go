@@ -9,6 +9,7 @@ import (
 	pb "github.com/kikeyama/grpc-sfx-demo/pb"
 
 	grpctrace "github.com/signalfx/signalfx-go-tracing/contrib/google.golang.org/grpc"
+	"github.com/signalfx/signalfx-go-tracing/tracing"
 )
 
 const (
@@ -29,12 +30,16 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	// enable signalfx trace
+	// Use signalfx tracing
+	tracing.Start(tracing.WithGlobalTag("stage", "demo"), tracing.WithServiceName("kikeyama_gorilla"))
+	defer tracing.Stop()
+
 	// Create the server interceptor using the grpc trace package.
 	si := grpctrace.StreamServerInterceptor(grpctrace.WithServiceName(serviceName))
 	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName(serviceName))
 
 	// Initialize the grpc server as normal, using the tracing interceptor.
+//	s := grpc.NewServer()
 	s := grpc.NewServer(grpc.StreamInterceptor(si), grpc.UnaryInterceptor(ui))
 
 	pb.RegisterDemoService(s, &pb.DemoService{GetMessageService: getMessageService})
