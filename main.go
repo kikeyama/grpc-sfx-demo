@@ -31,7 +31,8 @@ func main() {
 	}
 
 	// Use signalfx tracing
-	tracing.Start(tracing.WithGlobalTag("stage", "demo"), tracing.WithServiceName("kikeyama_gorilla"))
+//	tracing.Start(tracing.WithGlobalTag("stage", "demo"), tracing.WithServiceName(serviceName))
+	tracing.Start()
 	defer tracing.Stop()
 
 	// Create the server interceptor using the grpc trace package.
@@ -39,7 +40,7 @@ func main() {
 	ui := grpctrace.UnaryServerInterceptor(grpctrace.WithServiceName(serviceName))
 
 	// Initialize the grpc server as normal, using the tracing interceptor.
-//	s := grpc.NewServer()
+	//s := grpc.NewServer()
 	s := grpc.NewServer(grpc.StreamInterceptor(si), grpc.UnaryInterceptor(ui))
 
 	pb.RegisterDemoService(s, &pb.DemoService{GetMessageService: getMessageService})
