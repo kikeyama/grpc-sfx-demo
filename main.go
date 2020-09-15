@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	"net"
 
 	"google.golang.org/grpc"
@@ -12,14 +13,17 @@ import (
 	"github.com/signalfx/signalfx-go-tracing/tracing"
 )
 
+//var logger log.Logger
+var logger = log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
+
 const (
 	port = ":50051"
 	serviceName = "kikeyama_grpc_server"
 )
 
-// sayHello implements helloworld.DemoServer.GetMessage
+// getMessageService implements pb.DemoServer.GetMessage
 func getMessageService(ctx context.Context, in *pb.DemoRequest) (*pb.DemoReply, error) {
-	log.Printf("Received: %v", in.GetName())
+	logger.Printf("level=info message=\"Received: %v\"", in.GetName())
 	return &pb.DemoReply{Message: "Hello " + in.GetName()}, nil
 }
 
@@ -27,12 +31,12 @@ func main() {
 	// Create a listener for the server.
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Fatalf("level=fatal message=\"failed to listen: %v\"", err)
 	}
 
 	// Use signalfx tracing
-//	tracing.Start(tracing.WithGlobalTag("stage", "demo"), tracing.WithServiceName(serviceName))
-	tracing.Start()
+	tracing.Start(tracing.WithGlobalTag("stage", "demo"), tracing.WithServiceName(serviceName))
+//	tracing.Start()
 	defer tracing.Stop()
 
 	// Create the server interceptor using the grpc trace package.
@@ -45,6 +49,6 @@ func main() {
 
 	pb.RegisterDemoService(s, &pb.DemoService{GetMessageService: getMessageService})
 	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		logger.Fatalf("level=fatal message=\"failed to serve: %v\"", err)
 	}
 }
