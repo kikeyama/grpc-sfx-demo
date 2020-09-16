@@ -87,3 +87,142 @@ type UnstableDemoService interface {
 	// request demo message
 	GetMessageService(context.Context, *DemoRequest) (*DemoReply, error)
 }
+
+// AnimalServiceService is the service API for AnimalService service.
+// Fields should be assigned to their respective handler implementations only before
+// RegisterAnimalServiceService is called.  Any unassigned fields will result in the
+// handler for that method returning an Unimplemented error.
+type AnimalServiceService struct {
+	GetAnimal    func(context.Context, *AnimalId) (*AnimalInfo, error)
+	ListAnimals  func(context.Context, *EmptyRequest) (*Animals, error)
+	CreateAnimal func(context.Context, *Animal) (*AnimalInfo, error)
+}
+
+func (s *AnimalServiceService) getAnimal(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnimalId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return s.GetAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     s,
+		FullMethod: "/pb.AnimalService/GetAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.GetAnimal(ctx, req.(*AnimalId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+func (s *AnimalServiceService) listAnimals(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return s.ListAnimals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     s,
+		FullMethod: "/pb.AnimalService/ListAnimals",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.ListAnimals(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+func (s *AnimalServiceService) createAnimal(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Animal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return s.CreateAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     s,
+		FullMethod: "/pb.AnimalService/CreateAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.CreateAnimal(ctx, req.(*Animal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// RegisterAnimalServiceService registers a service implementation with a gRPC server.
+func RegisterAnimalServiceService(s grpc.ServiceRegistrar, srv *AnimalServiceService) {
+	srvCopy := *srv
+	if srvCopy.GetAnimal == nil {
+		srvCopy.GetAnimal = func(context.Context, *AnimalId) (*AnimalInfo, error) {
+			return nil, status.Errorf(codes.Unimplemented, "method GetAnimal not implemented")
+		}
+	}
+	if srvCopy.ListAnimals == nil {
+		srvCopy.ListAnimals = func(context.Context, *EmptyRequest) (*Animals, error) {
+			return nil, status.Errorf(codes.Unimplemented, "method ListAnimals not implemented")
+		}
+	}
+	if srvCopy.CreateAnimal == nil {
+		srvCopy.CreateAnimal = func(context.Context, *Animal) (*AnimalInfo, error) {
+			return nil, status.Errorf(codes.Unimplemented, "method CreateAnimal not implemented")
+		}
+	}
+	sd := grpc.ServiceDesc{
+		ServiceName: "pb.AnimalService",
+		Methods: []grpc.MethodDesc{
+			{
+				MethodName: "GetAnimal",
+				Handler:    srvCopy.getAnimal,
+			},
+			{
+				MethodName: "ListAnimals",
+				Handler:    srvCopy.listAnimals,
+			},
+			{
+				MethodName: "CreateAnimal",
+				Handler:    srvCopy.createAnimal,
+			},
+		},
+		Streams:  []grpc.StreamDesc{},
+		Metadata: "pb/demo.proto",
+	}
+
+	s.RegisterService(&sd, nil)
+}
+
+// NewAnimalServiceService creates a new AnimalServiceService containing the
+// implemented methods of the AnimalService service in s.  Any unimplemented
+// methods will result in the gRPC server returning an UNIMPLEMENTED status to the client.
+// This includes situations where the method handler is misspelled or has the wrong
+// signature.  For this reason, this function should be used with great care and
+// is not recommended to be used by most users.
+func NewAnimalServiceService(s interface{}) *AnimalServiceService {
+	ns := &AnimalServiceService{}
+	if h, ok := s.(interface {
+		GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
+	}); ok {
+		ns.GetAnimal = h.GetAnimal
+	}
+	if h, ok := s.(interface {
+		ListAnimals(context.Context, *EmptyRequest) (*Animals, error)
+	}); ok {
+		ns.ListAnimals = h.ListAnimals
+	}
+	if h, ok := s.(interface {
+		CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
+	}); ok {
+		ns.CreateAnimal = h.CreateAnimal
+	}
+	return ns
+}
+
+// UnstableAnimalServiceService is the service API for AnimalService service.
+// New methods may be added to this interface if they are added to the service
+// definition, which is not a backward-compatible change.  For this reason,
+// use of this type is not recommended.
+type UnstableAnimalServiceService interface {
+	GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
+	ListAnimals(context.Context, *EmptyRequest) (*Animals, error)
+	CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
+}

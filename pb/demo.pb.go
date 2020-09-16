@@ -164,6 +164,283 @@ func (x *DemoReply) GetMessage() string {
 	return ""
 }
 
+type AnimalId struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *AnimalId) Reset() {
+	*x = AnimalId{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_demo_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AnimalId) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnimalId) ProtoMessage() {}
+
+func (x *AnimalId) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_demo_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnimalId.ProtoReflect.Descriptor instead.
+func (*AnimalId) Descriptor() ([]byte, []int) {
+	return file_pb_demo_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AnimalId) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type Animal struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type     string   `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	Name     string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Height   int32    `protobuf:"varint,3,opt,name=height,proto3" json:"height,omitempty"`
+	Weight   int32    `protobuf:"varint,4,opt,name=weight,proto3" json:"weight,omitempty"`
+	Region   []string `protobuf:"bytes,5,rep,name=region,proto3" json:"region,omitempty"`
+	IsCattle bool     `protobuf:"varint,15,opt,name=isCattle,proto3" json:"isCattle,omitempty"`
+}
+
+func (x *Animal) Reset() {
+	*x = Animal{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_demo_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Animal) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Animal) ProtoMessage() {}
+
+func (x *Animal) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_demo_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Animal.ProtoReflect.Descriptor instead.
+func (*Animal) Descriptor() ([]byte, []int) {
+	return file_pb_demo_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Animal) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *Animal) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Animal) GetHeight() int32 {
+	if x != nil {
+		return x.Height
+	}
+	return 0
+}
+
+func (x *Animal) GetWeight() int32 {
+	if x != nil {
+		return x.Weight
+	}
+	return 0
+}
+
+func (x *Animal) GetRegion() []string {
+	if x != nil {
+		return x.Region
+	}
+	return nil
+}
+
+func (x *Animal) GetIsCattle() bool {
+	if x != nil {
+		return x.IsCattle
+	}
+	return false
+}
+
+type AnimalInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	//  Animal animal = 2;
+	Type     string   `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	Name     string   `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Height   int32    `protobuf:"varint,4,opt,name=height,proto3" json:"height,omitempty"`
+	Weight   int32    `protobuf:"varint,5,opt,name=weight,proto3" json:"weight,omitempty"`
+	Region   []string `protobuf:"bytes,6,rep,name=region,proto3" json:"region,omitempty"`
+	IsCattle bool     `protobuf:"varint,15,opt,name=isCattle,proto3" json:"isCattle,omitempty"`
+}
+
+func (x *AnimalInfo) Reset() {
+	*x = AnimalInfo{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_demo_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AnimalInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnimalInfo) ProtoMessage() {}
+
+func (x *AnimalInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_demo_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnimalInfo.ProtoReflect.Descriptor instead.
+func (*AnimalInfo) Descriptor() ([]byte, []int) {
+	return file_pb_demo_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AnimalInfo) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AnimalInfo) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *AnimalInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AnimalInfo) GetHeight() int32 {
+	if x != nil {
+		return x.Height
+	}
+	return 0
+}
+
+func (x *AnimalInfo) GetWeight() int32 {
+	if x != nil {
+		return x.Weight
+	}
+	return 0
+}
+
+func (x *AnimalInfo) GetRegion() []string {
+	if x != nil {
+		return x.Region
+	}
+	return nil
+}
+
+func (x *AnimalInfo) GetIsCattle() bool {
+	if x != nil {
+		return x.IsCattle
+	}
+	return false
+}
+
+type Animals struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Animals []*AnimalInfo `protobuf:"bytes,1,rep,name=animals,proto3" json:"animals,omitempty"`
+}
+
+func (x *Animals) Reset() {
+	*x = Animals{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_demo_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Animals) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Animals) ProtoMessage() {}
+
+func (x *Animals) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_demo_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Animals.ProtoReflect.Descriptor instead.
+func (*Animals) Descriptor() ([]byte, []int) {
+	return file_pb_demo_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Animals) GetAnimals() []*AnimalInfo {
+	if x != nil {
+		return x.Animals
+	}
+	return nil
+}
+
 var File_pb_demo_proto protoreflect.FileDescriptor
 
 var file_pb_demo_proto_rawDesc = []byte{
@@ -173,11 +450,46 @@ var file_pb_demo_proto_rawDesc = []byte{
 	0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x25, 0x0a, 0x09, 0x44, 0x65, 0x6d, 0x6f, 0x52, 0x65,
 	0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x3d, 0x0a,
-	0x04, 0x44, 0x65, 0x6d, 0x6f, 0x12, 0x35, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x73, 0x73,
-	0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x0f, 0x2e, 0x70, 0x62, 0x2e,
-	0x44, 0x65, 0x6d, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x70, 0x62,
-	0x2e, 0x44, 0x65, 0x6d, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x1a, 0x0a,
+	0x08, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x64, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x94, 0x01, 0x0a, 0x06, 0x41, 0x6e,
+	0x69, 0x6d, 0x61, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x68, 0x65,
+	0x69, 0x67, 0x68, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x16, 0x0a, 0x06,
+	0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65,
+	0x67, 0x69, 0x6f, 0x6e, 0x12, 0x1a, 0x0a, 0x08, 0x69, 0x73, 0x43, 0x61, 0x74, 0x74, 0x6c, 0x65,
+	0x18, 0x0f, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x69, 0x73, 0x43, 0x61, 0x74, 0x74, 0x6c, 0x65,
+	0x22, 0xa8, 0x01, 0x0a, 0x0a, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74,
+	0x79, 0x70, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68,
+	0x74, 0x18, 0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x68, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12,
+	0x16, 0x0a, 0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x06, 0x77, 0x65, 0x69, 0x67, 0x68, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x72, 0x65, 0x67, 0x69, 0x6f,
+	0x6e, 0x18, 0x06, 0x20, 0x03, 0x28, 0x09, 0x52, 0x06, 0x72, 0x65, 0x67, 0x69, 0x6f, 0x6e, 0x12,
+	0x1a, 0x0a, 0x08, 0x69, 0x73, 0x43, 0x61, 0x74, 0x74, 0x6c, 0x65, 0x18, 0x0f, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x08, 0x69, 0x73, 0x43, 0x61, 0x74, 0x74, 0x6c, 0x65, 0x22, 0x33, 0x0a, 0x07, 0x41,
+	0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x12, 0x28, 0x0a, 0x07, 0x61, 0x6e, 0x69, 0x6d, 0x61, 0x6c,
+	0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69,
+	0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x07, 0x61, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x73,
+	0x32, 0x3d, 0x0a, 0x04, 0x44, 0x65, 0x6d, 0x6f, 0x12, 0x35, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x4d,
+	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x0f, 0x2e,
+	0x70, 0x62, 0x2e, 0x44, 0x65, 0x6d, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d,
+	0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6d, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x32,
+	0x9a, 0x01, 0x0a, 0x0d, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63,
+	0x65, 0x12, 0x2b, 0x0a, 0x09, 0x47, 0x65, 0x74, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x12, 0x0c,
+	0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x64, 0x1a, 0x0e, 0x2e, 0x70,
+	0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x12, 0x2e,
+	0x0a, 0x0b, 0x4c, 0x69, 0x73, 0x74, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x12, 0x10, 0x2e,
+	0x70, 0x62, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
+	0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x22, 0x00, 0x12, 0x2c,
+	0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x12, 0x0a,
+	0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x1a, 0x0e, 0x2e, 0x70, 0x62, 0x2e,
+	0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72,
 	0x6f, 0x74, 0x6f, 0x33,
 }
 
@@ -193,20 +505,31 @@ func file_pb_demo_proto_rawDescGZIP() []byte {
 	return file_pb_demo_proto_rawDescData
 }
 
-var file_pb_demo_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_pb_demo_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_pb_demo_proto_goTypes = []interface{}{
 	(*EmptyRequest)(nil), // 0: pb.EmptyRequest
 	(*DemoRequest)(nil),  // 1: pb.DemoRequest
 	(*DemoReply)(nil),    // 2: pb.DemoReply
+	(*AnimalId)(nil),     // 3: pb.AnimalId
+	(*Animal)(nil),       // 4: pb.Animal
+	(*AnimalInfo)(nil),   // 5: pb.AnimalInfo
+	(*Animals)(nil),      // 6: pb.Animals
 }
 var file_pb_demo_proto_depIdxs = []int32{
-	1, // 0: pb.Demo.GetMessageService:input_type -> pb.DemoRequest
-	2, // 1: pb.Demo.GetMessageService:output_type -> pb.DemoReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	5, // 0: pb.Animals.animals:type_name -> pb.AnimalInfo
+	1, // 1: pb.Demo.GetMessageService:input_type -> pb.DemoRequest
+	3, // 2: pb.AnimalService.GetAnimal:input_type -> pb.AnimalId
+	0, // 3: pb.AnimalService.ListAnimals:input_type -> pb.EmptyRequest
+	4, // 4: pb.AnimalService.CreateAnimal:input_type -> pb.Animal
+	2, // 5: pb.Demo.GetMessageService:output_type -> pb.DemoReply
+	5, // 6: pb.AnimalService.GetAnimal:output_type -> pb.AnimalInfo
+	6, // 7: pb.AnimalService.ListAnimals:output_type -> pb.Animals
+	5, // 8: pb.AnimalService.CreateAnimal:output_type -> pb.AnimalInfo
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_pb_demo_proto_init() }
@@ -251,6 +574,54 @@ func file_pb_demo_proto_init() {
 				return nil
 			}
 		}
+		file_pb_demo_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AnimalId); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_pb_demo_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Animal); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_pb_demo_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AnimalInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_pb_demo_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Animals); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -258,9 +629,9 @@ func file_pb_demo_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pb_demo_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   7,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_pb_demo_proto_goTypes,
 		DependencyIndexes: file_pb_demo_proto_depIdxs,
@@ -348,6 +719,150 @@ var _Demo_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessageService",
 			Handler:    _Demo_GetMessageService_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "pb/demo.proto",
+}
+
+// AnimalServiceClient is the client API for AnimalService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type AnimalServiceClient interface {
+	GetAnimal(ctx context.Context, in *AnimalId, opts ...grpc.CallOption) (*AnimalInfo, error)
+	ListAnimals(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*Animals, error)
+	CreateAnimal(ctx context.Context, in *Animal, opts ...grpc.CallOption) (*AnimalInfo, error)
+}
+
+type animalServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAnimalServiceClient(cc grpc.ClientConnInterface) AnimalServiceClient {
+	return &animalServiceClient{cc}
+}
+
+func (c *animalServiceClient) GetAnimal(ctx context.Context, in *AnimalId, opts ...grpc.CallOption) (*AnimalInfo, error) {
+	out := new(AnimalInfo)
+	err := c.cc.Invoke(ctx, "/pb.AnimalService/GetAnimal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *animalServiceClient) ListAnimals(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*Animals, error) {
+	out := new(Animals)
+	err := c.cc.Invoke(ctx, "/pb.AnimalService/ListAnimals", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *animalServiceClient) CreateAnimal(ctx context.Context, in *Animal, opts ...grpc.CallOption) (*AnimalInfo, error) {
+	out := new(AnimalInfo)
+	err := c.cc.Invoke(ctx, "/pb.AnimalService/CreateAnimal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AnimalServiceServer is the server API for AnimalService service.
+type AnimalServiceServer interface {
+	GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
+	ListAnimals(context.Context, *EmptyRequest) (*Animals, error)
+	CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
+}
+
+// UnimplementedAnimalServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedAnimalServiceServer struct {
+}
+
+func (*UnimplementedAnimalServiceServer) GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAnimal not implemented")
+}
+func (*UnimplementedAnimalServiceServer) ListAnimals(context.Context, *EmptyRequest) (*Animals, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListAnimals not implemented")
+}
+func (*UnimplementedAnimalServiceServer) CreateAnimal(context.Context, *Animal) (*AnimalInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAnimal not implemented")
+}
+
+func RegisterAnimalServiceServer(s *grpc.Server, srv AnimalServiceServer) {
+	s.RegisterService(&_AnimalService_serviceDesc, srv)
+}
+
+func _AnimalService_GetAnimal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnimalId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AnimalServiceServer).GetAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.AnimalService/GetAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AnimalServiceServer).GetAnimal(ctx, req.(*AnimalId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AnimalService_ListAnimals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AnimalServiceServer).ListAnimals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.AnimalService/ListAnimals",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AnimalServiceServer).ListAnimals(ctx, req.(*EmptyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AnimalService_CreateAnimal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Animal)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AnimalServiceServer).CreateAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.AnimalService/CreateAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AnimalServiceServer).CreateAnimal(ctx, req.(*Animal))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _AnimalService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "pb.AnimalService",
+	HandlerType: (*AnimalServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetAnimal",
+			Handler:    _AnimalService_GetAnimal_Handler,
+		},
+		{
+			MethodName: "ListAnimals",
+			Handler:    _AnimalService_ListAnimals_Handler,
+		},
+		{
+			MethodName: "CreateAnimal",
+			Handler:    _AnimalService_CreateAnimal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

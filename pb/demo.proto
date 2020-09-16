@@ -13,10 +13,45 @@ message EmptyRequest {}
 
 // request message
 message DemoRequest {
-	string name = 1;
+  string name = 1;
 }
 
 // reqponse meesage
 message DemoReply {
   string message = 1;
+}
+
+// Animal service definition
+service AnimalService {
+  rpc GetAnimal (AnimalId) returns (AnimalInfo) {}
+  rpc ListAnimals (EmptyRequest) returns (Animals) {}
+  rpc CreateAnimal (Animal) returns (AnimalInfo) {}
+}
+
+message AnimalId {
+  string id = 1;
+}
+
+message Animal {
+  string type = 1;
+  string name = 2;
+  int32 height = 3;
+  int32 weight = 4;
+  repeated string region = 5;
+  bool isCattle = 15;
+}
+
+message AnimalInfo {
+  string id = 1;
+//  Animal animal = 2;
+  string type = 2;
+  string name = 3;
+  int32 height = 4;
+  int32 weight = 5;
+  repeated string region = 6;
+  bool isCattle = 15;
+}
+
+message Animals {
+  repeated AnimalInfo animals = 1;
 }
