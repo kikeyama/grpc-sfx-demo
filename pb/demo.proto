@@ -42,7 +42,7 @@ message Animal {
 }
 
 message AnimalInfo {
-  string id = 1;
+  bytes id = 1;
 //  Animal animal = 2;
   string type = 2;
   string name = 3;
