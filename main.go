@@ -116,6 +116,9 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 //	}
 
 	err = cur.All(ctx, &animals)
+	if err != nil {
+		logger.Printf("level=error message=\"unable to put data into animals: %v\"", err)
+	}
 	animalsJson, err := json.Marshal(animals)
 //	animalsJson, err := json.Marshal(d)
 	if err != nil {
