@@ -11,10 +11,14 @@ import (
 	"google.golang.org/grpc"
 	pb "github.com/kikeyama/grpc-sfx-demo/pb"
 
+	"github.com/google/uuid"
+
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 //	"go.mongodb.org/mongo-driver/mongo/readpref"
+//	"go.mongodb.org/mongo-driver/x/mongo/driver/uuid"
 
 	grpctrace "github.com/signalfx/signalfx-go-tracing/contrib/google.golang.org/grpc"
 	mongotrace "github.com/signalfx/signalfx-go-tracing/contrib/mongodb/mongo-go-driver/mongo"
@@ -31,6 +35,17 @@ const (
 	port = ":50051"
 	serviceName = "kikeyama_grpc_server"
 )
+
+type AnimalInfo struct {
+//	ID       primitive.ObjectID  `bson:"_id,omitempty" json:"id"`
+	Id       primitive.Binary  `bson:"_id,omitempty" json:"id"`
+	Type     string    `bson:"type" json:"type"`
+	Name     string    `bson:"name" json:"name"`
+	Height   int32     `bson:"height" json:"height"`
+	Weight   int32     `bson:"weight" json:"weight"`
+	Region   []string  `bson:"region" json:"region"`
+	IsCattle bool      `bson:"isCattle" json:"isCattle"`
+}
 
 func getEnv(key string, defaultVal string) string {
 	if value, exists := os.LookupEnv(key); !exists {
@@ -52,11 +67,13 @@ func connectMongo() error {
 
 	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:27017", mongoHost)))
 	if err != nil {
-		logger.Fatalf("level=fatal message=\"failed to open client %v\"", err)
+		logger.Printf("level=fatal message=\"failed to open client %v\"", err)
+		return err
 	}
 	err = client.Connect(ctx)
 	if err != nil {
-		logger.Fatalf("level=fatal message=\"failed to connect mongodb %v\"", err)
+		logger.Printf("level=fatal message=\"failed to connect mongodb %v\"", err)
+		return err
 	}
 	collection = client.Database("test").Collection("animals")
 
@@ -97,30 +114,59 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 	defer cur.Close(ctx)
 
 	var animals []*pb.AnimalInfo
-//	var animal pb.AnimalInfo
-//
-//	var d bson.D
-//
-//	for cur.Next(ctx) {
-//		var result bson.M
-//		if err = cursor.Decode(&result); err != nil {
-//			logger.Printf("level=error message=\"failed to decode cursor %v\"", err)
-//		}
+
+	for cur.Next(ctx) {
+		var result AnimalInfo
+		var animal *pb.AnimalInfo
+
+		if err = cur.Decode(&result); err != nil {
+			logger.Printf("level=error message=\"failed to decode cursor: %v\"", err)
+		}
+		resultJson, err := json.Marshal(result)
+		if err != nil {
+			logger.Printf("level=error message=\"unable to marshal animalinfo to json: %v\"", err)
+		}
+		logger.Printf(fmt.Sprintf("AnimalInfo: %s", string(resultJson)))
+		id := result.Id
+		animalUuid, err := uuid.FromBytes(id.Data)
+		if err != nil {
+			logger.Printf("%v", err)
+		}
+//		logger.Printf(fmt.Sprintf("id=%s", id.Hex()))
+		logger.Printf(fmt.Sprintf("id=%s", animalUuid.String()))
+		animal = &pb.AnimalInfo{
+//			Id:       id.Hex(),
+			Id:       animalUuid.String(),
+			Type:     result.Type,
+			Name:     result.Name,
+			Height:   result.Height,
+			Weight:   result.Weight,
+			Region:   result.Region,
+			IsCattle: result.IsCattle,
+		}
+		animalJson, err := json.Marshal(animal)
+		if err != nil {
+			logger.Printf("%v", err)
+		}
+		logger.Printf(fmt.Sprintf("pb.AnimalInfo: %s", string(animalJson)))
 //		id, ok := result["_id"]
 //		if ok {
-//			result["id"] = id.String()
+//			animal["id"] = id.String()
 //		} else {
-//			result["id"] = ""
+//			animal["id"] = ""
 //		}
-//		d = append(d, result)
-//	}
+
+		animals = append(animals, animal)
+	}
+//
+//	animalsJson, err := json.Marshal(d)
 
 	err = cur.All(ctx, &animals)
 	if err != nil {
 		logger.Printf("level=error message=\"unable to put data into animals: %v\"", err)
 	}
+
 	animalsJson, err := json.Marshal(animals)
-//	animalsJson, err := json.Marshal(d)
 	if err != nil {
 		logger.Printf("level=error message=\"unable to marshall animals to json\"")
 	}
@@ -148,6 +194,9 @@ func main() {
 	defer tracing.Stop()
 
 	err = connectMongo()
+	if err != nil {
+		logger.Fatalf("level=fatal message=\"cannot connect to MongoDB: %v\"", err)
+	}
 
 	defer func() {
 		ctx := context.Background()
