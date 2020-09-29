@@ -9,6 +9,8 @@ import (
 	"encoding/json"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	pb "github.com/kikeyama/grpc-sfx-demo/pb"
 
 	"github.com/google/uuid"
@@ -170,28 +172,47 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 	if err != nil {
 		logger.Printf("level=error message=\"unable to marshall animals to json\"")
 	}
-	logger.Printf("level=info message=\"retrieve list from mongodb\" data=%s", string(animalsJson))
+	logger.Printf("level=info message=\"list animals from mongodb\" data=%s", string(animalsJson))
 
 	// gRPC response
 	return &pb.Animals{Animals: animals}, nil
 }
 
+//func (s *server) GetAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
 func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
-	logger.Printf(fmt.Sprintf("level=info message=\"Get Animal for id:%s\"", in.GetId()))
+	logger.Printf(fmt.Sprintf("level=info message=\"Get Animal for id: %s\"", in.GetId()))
 
-	id, err := uuid.Parse(in.GetId())
+	animalUuid, err := uuid.Parse(in.GetId())
+	id, err := animalUuid.MarshalBinary()
+//	id, err := animalUuid.MarshalText()
 	if err != nil {
 		logger.Printf("level=error message=\"unable to parse uuid: %v\"", err)
 	}
 
-	res := collection.FindOne(ctx, bson.M{"_id": id})
-
 	var animal pb.AnimalInfo
-	if err = res.Decode(&animal); err != nil {
-		logger.Printf("level=error message\"failed to decode reuslt:%v\"", err)
+	err = collection.FindOne(ctx, bson.M{"_id": primitive.Binary{
+		Subtype: 0x04,
+		Data:    id,
+	}}).Decode(&animal)
+
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			logger.Printf("level=info message=\"Document not found: %v\"", err)
+			return &animal, status.Error(codes.NotFound, "document not found")
+		}
+		logger.Printf("level=error message\"failed to decode reuslt: %v\"", err)
 	}
 
+//	if err = res.Decode(&animal); err != nil {
+//		logger.Printf("level=error message\"failed to decode reuslt:%v\"", err)
+//	}
 	animal.Id = in.GetId()
+
+	animalJson, err := json.Marshal(animal)
+	if err != nil {
+		logger.Printf("level=error message=\"unable to marshall animal to json\"")
+	}
+	logger.Printf("level=info message=\"get animal from mongodb\" data=%s", string(animalJson))
 
 	return &animal, nil
 }
@@ -208,6 +229,7 @@ func main() {
 //	tracing.Start()
 	defer tracing.Stop()
 
+	// Connect MongoDB
 	err = connectMongo()
 	if err != nil {
 		logger.Fatalf("level=fatal message=\"cannot connect to MongoDB: %v\"", err)
@@ -228,13 +250,12 @@ func main() {
 	//s := grpc.NewServer()
 	s := grpc.NewServer(grpc.StreamInterceptor(si), grpc.UnaryInterceptor(ui))
 
-	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{ListAnimals: listAnimals})
+//	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{ListAnimals: listAnimals})
+	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{
+		ListAnimals: listAnimals,
+		GetAnimal: getAnimal,
+	})
 	if err = s.Serve(lis); err != nil {
 		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.ListAnimals: %v\"", err)
-	}
-
-	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{GetAnimal: getAnimal})
-	if err = s.Serve(lis); err != nil {
-		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.GetAnimal: %v\"", err)
 	}
 }
