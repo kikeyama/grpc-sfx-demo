@@ -67,12 +67,12 @@ func connectMongo() error {
 
 	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:27017", mongoHost)))
 	if err != nil {
-		logger.Printf("level=fatal message=\"failed to open client %v\"", err)
+		logger.Printf("level=error message=\"failed to open client %v\"", err)
 		return err
 	}
 	err = client.Connect(ctx)
 	if err != nil {
-		logger.Printf("level=fatal message=\"failed to connect mongodb %v\"", err)
+		logger.Printf("level=error message=\"failed to connect mongodb %v\"", err)
 		return err
 	}
 	collection = client.Database("test").Collection("animals")
@@ -109,7 +109,7 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 //	collection := client.Database("test").Collection("animals")
 	cur, err := collection.Find(ctx, bson.D{})
 	if err != nil {
-		logger.Printf("level=error message=\"failed to find collection: %v\"", err)
+		logger.Printf("level=error message=\"collection.Find failed: %v\"", err)
 	}
 	defer cur.Close(ctx)
 
@@ -122,33 +122,33 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 		if err = cur.Decode(&result); err != nil {
 			logger.Printf("level=error message=\"failed to decode cursor: %v\"", err)
 		}
-		resultJson, err := json.Marshal(result)
-		if err != nil {
-			logger.Printf("level=error message=\"unable to marshal animalinfo to json: %v\"", err)
-		}
-		logger.Printf(fmt.Sprintf("AnimalInfo: %s", string(resultJson)))
+//		resultJson, err := json.Marshal(result)
+//		if err != nil {
+//			logger.Printf("level=error message=\"unable to marshal animalinfo to json: %v\"", err)
+//		}
+//		logger.Printf(fmt.Sprintf("AnimalInfo: %s", string(resultJson)))
 		id := result.Id
 		animalUuid, err := uuid.FromBytes(id.Data)
 		if err != nil {
-			logger.Printf("%v", err)
+			logger.Printf("level=error message=failed to parse UUID from bytes[]: %v", err)
 		}
 //		logger.Printf(fmt.Sprintf("id=%s", id.Hex()))
-		logger.Printf(fmt.Sprintf("id=%s", animalUuid.String()))
+//		logger.Printf(fmt.Sprintf("id=%s", animalUuid.String()))
 		animal = &pb.AnimalInfo{
 //			Id:       id.Hex(),
 			Id:       animalUuid.String(),
-			Type:     result.Type,
-			Name:     result.Name,
-			Height:   result.Height,
-			Weight:   result.Weight,
-			Region:   result.Region,
-			IsCattle: result.IsCattle,
+//			Type:     result.Type,
+//			Name:     result.Name,
+//			Height:   result.Height,
+//			Weight:   result.Weight,
+//			Region:   result.Region,
+//			IsCattle: result.IsCattle,
 		}
-		animalJson, err := json.Marshal(animal)
-		if err != nil {
-			logger.Printf("%v", err)
-		}
-		logger.Printf(fmt.Sprintf("pb.AnimalInfo: %s", string(animalJson)))
+//		animalJson, err := json.Marshal(animal)
+//		if err != nil {
+//			logger.Printf("level=error message=unable to marshal animal to json: %v", err)
+//		}
+//		logger.Printf(fmt.Sprintf("pb.AnimalInfo: %s", string(animalJson)))
 //		id, ok := result["_id"]
 //		if ok {
 //			animal["id"] = id.String()
@@ -176,10 +176,25 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 	return &pb.Animals{Animals: animals}, nil
 }
 
-//func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
-//	logger.Printf("level=info message=\"Get Animal\"")
-//	return &pb.AnimalInfo{Id: in.GetId(), Animal: in.getAnimal()}, nil
-//}
+func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
+	logger.Printf(fmt.Sprintf("level=info message=\"Get Animal for id:%s\"", in.GetId()))
+
+	id, err := uuid.Parse(in.GetId())
+	if err != nil {
+		logger.Printf("level=error message=\"unable to parse uuid: %v\"", err)
+	}
+
+	res := collection.FindOne(ctx, bson.M{"_id": id})
+
+	var animal pb.AnimalInfo
+	if err = res.Decode(&animal); err != nil {
+		logger.Printf("level=error message\"failed to decode reuslt:%v\"", err)
+	}
+
+	animal.Id = in.GetId()
+
+	return &animal, nil
+}
 
 func main() {
 	// Create a listener for the server.
@@ -216,5 +231,10 @@ func main() {
 	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{ListAnimals: listAnimals})
 	if err = s.Serve(lis); err != nil {
 		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.ListAnimals: %v\"", err)
+	}
+
+	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{GetAnimal: getAnimal})
+	if err = s.Serve(lis); err != nil {
+		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.GetAnimal: %v\"", err)
 	}
 }
