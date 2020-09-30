@@ -94,7 +94,7 @@ type UnstableDemoService interface {
 // handler for that method returning an Unimplemented error.
 type AnimalServiceService struct {
 	GetAnimal    func(context.Context, *AnimalId) (*AnimalInfo, error)
-	ListAnimals  func(context.Context, *EmptyRequest) (*Animals, error)
+	ListAnimals  func(context.Context, *Empty) (*Animals, error)
 	CreateAnimal func(context.Context, *Animal) (*AnimalInfo, error)
 }
 
@@ -116,7 +116,7 @@ func (s *AnimalServiceService) getAnimal(_ interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 func (s *AnimalServiceService) listAnimals(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EmptyRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -128,7 +128,7 @@ func (s *AnimalServiceService) listAnimals(_ interface{}, ctx context.Context, d
 		FullMethod: "/pb.AnimalService/ListAnimals",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return s.ListAnimals(ctx, req.(*EmptyRequest))
+		return s.ListAnimals(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -159,7 +159,7 @@ func RegisterAnimalServiceService(s grpc.ServiceRegistrar, srv *AnimalServiceSer
 		}
 	}
 	if srvCopy.ListAnimals == nil {
-		srvCopy.ListAnimals = func(context.Context, *EmptyRequest) (*Animals, error) {
+		srvCopy.ListAnimals = func(context.Context, *Empty) (*Animals, error) {
 			return nil, status.Errorf(codes.Unimplemented, "method ListAnimals not implemented")
 		}
 	}
@@ -205,7 +205,7 @@ func NewAnimalServiceService(s interface{}) *AnimalServiceService {
 		ns.GetAnimal = h.GetAnimal
 	}
 	if h, ok := s.(interface {
-		ListAnimals(context.Context, *EmptyRequest) (*Animals, error)
+		ListAnimals(context.Context, *Empty) (*Animals, error)
 	}); ok {
 		ns.ListAnimals = h.ListAnimals
 	}
@@ -223,6 +223,6 @@ func NewAnimalServiceService(s interface{}) *AnimalServiceService {
 // use of this type is not recommended.
 type UnstableAnimalServiceService interface {
 	GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
-	ListAnimals(context.Context, *EmptyRequest) (*Animals, error)
+	ListAnimals(context.Context, *Empty) (*Animals, error)
 	CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
 }

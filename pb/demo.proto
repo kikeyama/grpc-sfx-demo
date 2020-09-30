@@ -24,9 +24,11 @@ message DemoReply {
 // Animal service definition
 service AnimalService {
   rpc GetAnimal (AnimalId) returns (AnimalInfo) {}
-  rpc ListAnimals (EmptyRequest) returns (Animals) {}
+  rpc ListAnimals (Empty) returns (Animals) {}
   rpc CreateAnimal (Animal) returns (AnimalInfo) {}
 }
+
+message Empty {}
 
 message AnimalId {
   string id = 1;

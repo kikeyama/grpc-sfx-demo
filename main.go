@@ -9,8 +9,8 @@ import (
 	"encoding/json"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+//	"google.golang.org/grpc/codes"
+//	"google.golang.org/grpc/status"
 	pb "github.com/kikeyama/grpc-sfx-demo/pb"
 
 	"github.com/google/uuid"
@@ -82,7 +82,7 @@ func connectMongo() error {
 	return nil
 }
 
-func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) {
+func listAnimals(ctx context.Context, in *pb.Empty) (*pb.Animals, error) {
 	logger.Printf("level=info message=\"List Animals\"")
 
 //	// MongoDB
@@ -139,12 +139,12 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 		animal = &pb.AnimalInfo{
 //			Id:       id.Hex(),
 			Id:       animalUuid.String(),
-//			Type:     result.Type,
-//			Name:     result.Name,
-//			Height:   result.Height,
-//			Weight:   result.Weight,
-//			Region:   result.Region,
-//			IsCattle: result.IsCattle,
+			Type:     result.Type,
+			Name:     result.Name,
+			Height:   result.Height,
+			Weight:   result.Weight,
+			Region:   result.Region,
+			IsCattle: result.IsCattle,
 		}
 //		animalJson, err := json.Marshal(animal)
 //		if err != nil {
@@ -163,10 +163,10 @@ func listAnimals(ctx context.Context, in *pb.EmptyRequest) (*pb.Animals, error) 
 //
 //	animalsJson, err := json.Marshal(d)
 
-	err = cur.All(ctx, &animals)
-	if err != nil {
-		logger.Printf("level=error message=\"unable to put data into animals: %v\"", err)
-	}
+//	err = cur.All(ctx, &animals)
+//	if err != nil {
+//		logger.Printf("level=error message=\"unable to put data into animals: %v\"", err)
+//	}
 
 	animalsJson, err := json.Marshal(animals)
 	if err != nil {
@@ -189,7 +189,10 @@ func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
 		logger.Printf("level=error message=\"unable to parse uuid: %v\"", err)
 	}
 
-	var animal pb.AnimalInfo
+	var animal AnimalInfo
+	var pbAnimal pb.AnimalInfo
+
+	// Mongo Query
 	err = collection.FindOne(ctx, bson.M{"_id": primitive.Binary{
 		Subtype: 0x04,
 		Data:    id,
@@ -198,23 +201,40 @@ func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			logger.Printf("level=info message=\"Document not found: %v\"", err)
-			return &animal, status.Error(codes.NotFound, "document not found")
+//			return &pbAnimal, status.Error(codes.NotFound, "document not found")
+			return &pbAnimal, nil
 		}
 		logger.Printf("level=error message\"failed to decode reuslt: %v\"", err)
+		return &pbAnimal, err
 	}
 
 //	if err = res.Decode(&animal); err != nil {
 //		logger.Printf("level=error message\"failed to decode reuslt:%v\"", err)
 //	}
-	animal.Id = in.GetId()
+//	pbAnimal.Id = in.GetId()
 
-	animalJson, err := json.Marshal(animal)
+	resultUuid, err := uuid.FromBytes(animal.Id.Data)
+	if err != nil {
+		logger.Printf("level=error message=failed to parse UUID from bytes[]: %v", err)
+	}
+
+	pbAnimal = pb.AnimalInfo{
+		Id:       resultUuid.String(),
+		Type:     animal.Type,
+		Name:     animal.Name,
+		Height:   animal.Height,
+		Weight:   animal.Weight,
+		Region:   animal.Region,
+		IsCattle: animal.IsCattle,
+	}
+
+	animalJson, err := json.Marshal(pbAnimal)
 	if err != nil {
 		logger.Printf("level=error message=\"unable to marshall animal to json\"")
 	}
 	logger.Printf("level=info message=\"get animal from mongodb\" data=%s", string(animalJson))
 
-	return &animal, nil
+	return &pbAnimal, nil
 }
 
 func main() {
