@@ -237,6 +237,53 @@ func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
 	return &pbAnimal, nil
 }
 
+func createAnimal(ctx context.Context, in *pb.Animal) (*pb.AnimalInfo, error) {
+	logger.Printf("level=info message=\"Create Animal\"")
+
+	var pbAnimalInfo pb.AnimalInfo
+	var animalInfo AnimalInfo
+
+	animalUuid, err := uuid.NewRandom()
+	id, err := animalUuid.MarshalBinary()
+	if err != nil {
+		logger.Printf("level=error message=failed to create a new UUID: %v", err)
+		return &pbAnimalInfo, err
+	}
+
+	logger.Printf(fmt.Sprintf("level=info message=\"insert animal data with uuid: %s\"", animalUuid.String()))
+
+	animalInfo = AnimalInfo{
+		Id: primitive.Binary{
+			Subtype: 0x04,
+			Data:    id,
+		},
+		Type:     in.Type,
+		Name:     in.Name,
+		Height:   in.Height,
+		Weight:   in.Weight,
+		Region:   in.Region,
+		IsCattle: in.IsCattle,
+	}
+
+	_, err = collection.InsertOne(ctx, animalInfo)
+	if err != nil {
+		logger.Printf("level=error message=failed to insert new animal data: %v", err)
+		return &pbAnimalInfo, err
+	}
+
+	pbAnimalInfo = pb.AnimalInfo{
+		Id:       animalUuid.String(),
+		Type:     in.Type,
+		Name:     in.Name,
+		Height:   in.Height,
+		Weight:   in.Weight,
+		Region:   in.Region,
+		IsCattle: in.IsCattle,
+	}
+
+	return &pbAnimalInfo, nil
+}
+
 func main() {
 	// Create a listener for the server.
 	lis, err := net.Listen("tcp", port)
@@ -274,6 +321,7 @@ func main() {
 	pb.RegisterAnimalServiceService(s, &pb.AnimalServiceService{
 		ListAnimals: listAnimals,
 		GetAnimal: getAnimal,
+		CreateAnimal: createAnimal,
 	})
 	if err = s.Serve(lis); err != nil {
 		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.ListAnimals: %v\"", err)
