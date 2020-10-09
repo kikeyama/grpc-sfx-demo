@@ -518,7 +518,7 @@ var file_pb_demo_proto_rawDesc = []byte{
 	0x6f, 0x12, 0x35, 0x0a, 0x11, 0x47, 0x65, 0x74, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x53,
 	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x0f, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6d, 0x6f,
 	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x0d, 0x2e, 0x70, 0x62, 0x2e, 0x44, 0x65, 0x6d,
-	0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x32, 0x93, 0x01, 0x0a, 0x0d, 0x41, 0x6e, 0x69,
+	0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x32, 0xbe, 0x01, 0x0a, 0x0d, 0x41, 0x6e, 0x69,
 	0x6d, 0x61, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x2b, 0x0a, 0x09, 0x47, 0x65,
 	0x74, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x12, 0x0c, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69,
 	0x6d, 0x61, 0x6c, 0x49, 0x64, 0x1a, 0x0e, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61,
@@ -527,8 +527,11 @@ var file_pb_demo_proto_rawDesc = []byte{
 	0x79, 0x1a, 0x0b, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x73, 0x22, 0x00,
 	0x12, 0x2c, 0x0a, 0x0c, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c,
 	0x12, 0x0a, 0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x1a, 0x0e, 0x2e, 0x70,
-	0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x6e, 0x66, 0x6f, 0x22, 0x00, 0x12, 0x29,
+	0x0a, 0x0c, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x12, 0x0c,
+	0x2e, 0x70, 0x62, 0x2e, 0x41, 0x6e, 0x69, 0x6d, 0x61, 0x6c, 0x49, 0x64, 0x1a, 0x09, 0x2e, 0x70,
+	0x62, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -560,12 +563,14 @@ var file_pb_demo_proto_depIdxs = []int32{
 	4, // 2: pb.AnimalService.GetAnimal:input_type -> pb.AnimalId
 	3, // 3: pb.AnimalService.ListAnimals:input_type -> pb.Empty
 	5, // 4: pb.AnimalService.CreateAnimal:input_type -> pb.Animal
-	2, // 5: pb.Demo.GetMessageService:output_type -> pb.DemoReply
-	6, // 6: pb.AnimalService.GetAnimal:output_type -> pb.AnimalInfo
-	7, // 7: pb.AnimalService.ListAnimals:output_type -> pb.Animals
-	6, // 8: pb.AnimalService.CreateAnimal:output_type -> pb.AnimalInfo
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
+	4, // 5: pb.AnimalService.DeleteAnimal:input_type -> pb.AnimalId
+	2, // 6: pb.Demo.GetMessageService:output_type -> pb.DemoReply
+	6, // 7: pb.AnimalService.GetAnimal:output_type -> pb.AnimalInfo
+	7, // 8: pb.AnimalService.ListAnimals:output_type -> pb.Animals
+	6, // 9: pb.AnimalService.CreateAnimal:output_type -> pb.AnimalInfo
+	3, // 10: pb.AnimalService.DeleteAnimal:output_type -> pb.Empty
+	6, // [6:11] is the sub-list for method output_type
+	1, // [1:6] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -783,6 +788,7 @@ type AnimalServiceClient interface {
 	GetAnimal(ctx context.Context, in *AnimalId, opts ...grpc.CallOption) (*AnimalInfo, error)
 	ListAnimals(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Animals, error)
 	CreateAnimal(ctx context.Context, in *Animal, opts ...grpc.CallOption) (*AnimalInfo, error)
+	DeleteAnimal(ctx context.Context, in *AnimalId, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type animalServiceClient struct {
@@ -820,11 +826,21 @@ func (c *animalServiceClient) CreateAnimal(ctx context.Context, in *Animal, opts
 	return out, nil
 }
 
+func (c *animalServiceClient) DeleteAnimal(ctx context.Context, in *AnimalId, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/pb.AnimalService/DeleteAnimal", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AnimalServiceServer is the server API for AnimalService service.
 type AnimalServiceServer interface {
 	GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
 	ListAnimals(context.Context, *Empty) (*Animals, error)
 	CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
+	DeleteAnimal(context.Context, *AnimalId) (*Empty, error)
 }
 
 // UnimplementedAnimalServiceServer can be embedded to have forward compatible implementations.
@@ -839,6 +855,9 @@ func (*UnimplementedAnimalServiceServer) ListAnimals(context.Context, *Empty) (*
 }
 func (*UnimplementedAnimalServiceServer) CreateAnimal(context.Context, *Animal) (*AnimalInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAnimal not implemented")
+}
+func (*UnimplementedAnimalServiceServer) DeleteAnimal(context.Context, *AnimalId) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAnimal not implemented")
 }
 
 func RegisterAnimalServiceServer(s *grpc.Server, srv AnimalServiceServer) {
@@ -899,6 +918,24 @@ func _AnimalService_CreateAnimal_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AnimalService_DeleteAnimal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnimalId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AnimalServiceServer).DeleteAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.AnimalService/DeleteAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AnimalServiceServer).DeleteAnimal(ctx, req.(*AnimalId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _AnimalService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.AnimalService",
 	HandlerType: (*AnimalServiceServer)(nil),
@@ -914,6 +951,10 @@ var _AnimalService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateAnimal",
 			Handler:    _AnimalService_CreateAnimal_Handler,
+		},
+		{
+			MethodName: "DeleteAnimal",
+			Handler:    _AnimalService_DeleteAnimal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -96,6 +96,7 @@ type AnimalServiceService struct {
 	GetAnimal    func(context.Context, *AnimalId) (*AnimalInfo, error)
 	ListAnimals  func(context.Context, *Empty) (*Animals, error)
 	CreateAnimal func(context.Context, *Animal) (*AnimalInfo, error)
+	DeleteAnimal func(context.Context, *AnimalId) (*Empty, error)
 }
 
 func (s *AnimalServiceService) getAnimal(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -149,6 +150,23 @@ func (s *AnimalServiceService) createAnimal(_ interface{}, ctx context.Context, 
 	}
 	return interceptor(ctx, in, info, handler)
 }
+func (s *AnimalServiceService) deleteAnimal(_ interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AnimalId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return s.DeleteAnimal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     s,
+		FullMethod: "/pb.AnimalService/DeleteAnimal",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return s.DeleteAnimal(ctx, req.(*AnimalId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
 
 // RegisterAnimalServiceService registers a service implementation with a gRPC server.
 func RegisterAnimalServiceService(s grpc.ServiceRegistrar, srv *AnimalServiceService) {
@@ -168,6 +186,11 @@ func RegisterAnimalServiceService(s grpc.ServiceRegistrar, srv *AnimalServiceSer
 			return nil, status.Errorf(codes.Unimplemented, "method CreateAnimal not implemented")
 		}
 	}
+	if srvCopy.DeleteAnimal == nil {
+		srvCopy.DeleteAnimal = func(context.Context, *AnimalId) (*Empty, error) {
+			return nil, status.Errorf(codes.Unimplemented, "method DeleteAnimal not implemented")
+		}
+	}
 	sd := grpc.ServiceDesc{
 		ServiceName: "pb.AnimalService",
 		Methods: []grpc.MethodDesc{
@@ -182,6 +205,10 @@ func RegisterAnimalServiceService(s grpc.ServiceRegistrar, srv *AnimalServiceSer
 			{
 				MethodName: "CreateAnimal",
 				Handler:    srvCopy.createAnimal,
+			},
+			{
+				MethodName: "DeleteAnimal",
+				Handler:    srvCopy.deleteAnimal,
 			},
 		},
 		Streams:  []grpc.StreamDesc{},
@@ -214,6 +241,11 @@ func NewAnimalServiceService(s interface{}) *AnimalServiceService {
 	}); ok {
 		ns.CreateAnimal = h.CreateAnimal
 	}
+	if h, ok := s.(interface {
+		DeleteAnimal(context.Context, *AnimalId) (*Empty, error)
+	}); ok {
+		ns.DeleteAnimal = h.DeleteAnimal
+	}
 	return ns
 }
 
@@ -225,4 +257,5 @@ type UnstableAnimalServiceService interface {
 	GetAnimal(context.Context, *AnimalId) (*AnimalInfo, error)
 	ListAnimals(context.Context, *Empty) (*Animals, error)
 	CreateAnimal(context.Context, *Animal) (*AnimalInfo, error)
+	DeleteAnimal(context.Context, *AnimalId) (*Empty, error)
 }

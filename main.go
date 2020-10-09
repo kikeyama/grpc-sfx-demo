@@ -6,11 +6,12 @@ import (
 	"os"
 	"net"
 	"fmt"
+	"strconv"
 	"encoding/json"
 
 	"google.golang.org/grpc"
-//	"google.golang.org/grpc/codes"
-//	"google.golang.org/grpc/status"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	pb "github.com/kikeyama/grpc-sfx-demo/pb"
 
 	"github.com/google/uuid"
@@ -280,8 +281,47 @@ func createAnimal(ctx context.Context, in *pb.Animal) (*pb.AnimalInfo, error) {
 		Region:   in.Region,
 		IsCattle: in.IsCattle,
 	}
+	animalJson, err := json.Marshal(pbAnimalInfo)
+	if err != nil {
+		logger.Printf("level=error message=\"unable to marshall animal to json\"")
+	}
+	logger.Printf("level=info message=\"create animal into mongodb\" data=%s", string(animalJson))
 
 	return &pbAnimalInfo, nil
+}
+
+func deleteAnimal(ctx context.Context, in *pb.AnimalId) (*pb.Empty, error) {
+	logger.Printf(fmt.Sprintf("level=info message=\"Delete Animal for id: %s\"", in.GetId()))
+
+	animalUuid, err := uuid.Parse(in.GetId())
+	id, err := animalUuid.MarshalBinary()
+	if err != nil {
+		logger.Printf("level=error message=\"unable to parse uuid: %v\"", err)
+	}
+
+	var pbEmpty pb.Empty
+
+	// Mongo Query
+	result, err := collection.DeleteOne(ctx, bson.M{"_id": primitive.Binary{
+		Subtype: 0x04,
+		Data:    id,
+	}})
+
+	if err != nil {
+		logger.Printf("level=error message\"failed to delete record: %v\"", err)
+		return &pbEmpty, err
+	}
+
+	deletedCount := result.DeletedCount
+	if deletedCount < 1 {
+		logger.Printf("level=info message=\"Document not found\"")
+		return &pbEmpty, status.Error(codes.NotFound, "document not found")
+//		return &pbEmpty, nil
+	}
+
+	logger.Printf(fmt.Sprintf("level=info message=\"deleted %s record\"", strconv.FormatInt(deletedCount, 10)))
+
+	return &pbEmpty, nil
 }
 
 func main() {
@@ -322,6 +362,7 @@ func main() {
 		ListAnimals: listAnimals,
 		GetAnimal: getAnimal,
 		CreateAnimal: createAnimal,
+		DeleteAnimal: deleteAnimal,
 	})
 	if err = s.Serve(lis); err != nil {
 		logger.Fatalf("level=fatal message=\"failed to serve at AnimalService.ListAnimals: %v\"", err)

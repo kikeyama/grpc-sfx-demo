@@ -26,6 +26,7 @@ service AnimalService {
   rpc GetAnimal (AnimalId) returns (AnimalInfo) {}
   rpc ListAnimals (Empty) returns (Animals) {}
   rpc CreateAnimal (Animal) returns (AnimalInfo) {}
+  rpc DeleteAnimal (AnimalId) returns (Empty) {}
 }
 
 message Empty {}
