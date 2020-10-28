@@ -35,7 +35,7 @@ var collection *mongo.Collection
 var client *mongo.Client
 
 const (
-	port = ":50051"
+//	port = ":50051"
 	serviceName = "kikeyama_grpc_server"
 )
 
@@ -61,6 +61,7 @@ func getEnv(key string, defaultVal string) string {
 func connectMongo() error {
 	// MongoDB
 	mongoHost := getEnv("MONGO_HOST", "localhost")
+	mongoPort := getEnv("MONGO_PORT", "27017")
 	opts := options.Client()
 
 	ctx := context.TODO()
@@ -68,7 +69,7 @@ func connectMongo() error {
 	// SignalFx Instrumentation
 	opts.SetMonitor(mongotrace.NewMonitor(mongotrace.WithServiceName("kikeyama_mongo")))
 
-	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:27017", mongoHost)))
+	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:%s", mongoHost, mongoPort)))
 	if err != nil {
 		logger.Printf("level=error message=\"failed to open client %v\"", err)
 		return err
@@ -326,7 +327,8 @@ func deleteAnimal(ctx context.Context, in *pb.AnimalId) (*pb.Empty, error) {
 
 func main() {
 	// Create a listener for the server.
-	lis, err := net.Listen("tcp", port)
+	grpcPort := getEnv("GRPC_PORT", "50051")
+	lis, err := net.Listen("tcp", ":" + grpcPort)
 	if err != nil {
 		logger.Fatalf("level=fatal message=\"failed to listen: %v\"", err)
 	}
