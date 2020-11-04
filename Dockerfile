@@ -4,10 +4,10 @@ WORKDIR /go/src/work
 COPY main.go /go/src/work/
 COPY go.mod /go/src/work/
 COPY go.sum /go/src/work/
-COPY pb/ /go/src/work/
+COPY pb /go/src/work/pb
 #RUN go mod init
 #RUN go mod edit -require github.com/opentracing/opentracing-go@v1.1.0
-RUN CGO_ENABLED=0 go build -o /bin/grpc-sfx-demo
+RUN CGO_ENABLED=0 go build -o /bin/grpc-sfx-demo main.go
 
 FROM scratch
 COPY --from=build /bin/grpc-sfx-demo /bin/grpc-sfx-demo
