@@ -62,14 +62,26 @@ func connectMongo() error {
 	// MongoDB
 	mongoHost := getEnv("MONGO_HOST", "localhost")
 	mongoPort := getEnv("MONGO_PORT", "27017")
-	opts := options.Client()
+	mongoDatabase := getEnv("MONGO_DATABASE", "test")
+	mongoUser := getEnv("MONGO_USER", "appuser")
+	mongoPassword := getEnv("MONGO_PASSWORD", "password")
+	mongoAuthMechanism := getEnv("MONGO_AUTH_MECHANISM", "SCRAM-SHA-256")
+
+//	opts := options.Client()
+	// SignalFx Instrumentation
+//	opts.SetMonitor(mongotrace.NewMonitor(mongotrace.WithServiceName("kikeyama_mongo")))
+	opts := options.Client().SetMonitor(mongotrace.NewMonitor(mongotrace.WithServiceName("kikeyama_mongo")))
+
+	credential := options.Credential{
+		AuthMechanism: mongoAuthMechanism,
+		AuthSource:    mongoDatabase,
+		Username:      mongoUser,
+		Password:      mongoPassword,
+	}
 
 	ctx := context.TODO()
 	
-	// SignalFx Instrumentation
-	opts.SetMonitor(mongotrace.NewMonitor(mongotrace.WithServiceName("kikeyama_mongo")))
-
-	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:%s", mongoHost, mongoPort)))
+	client, err := mongo.NewClient(opts.ApplyURI(fmt.Sprintf("mongodb://%s:%s", mongoHost, mongoPort)).SetAuth(credential))
 	if err != nil {
 		logger.Printf("level=error message=\"failed to open client %v\"", err)
 		return err
@@ -79,7 +91,7 @@ func connectMongo() error {
 		logger.Printf("level=error message=\"failed to connect mongodb %v\"", err)
 		return err
 	}
-	collection = client.Database("test").Collection("animals")
+	collection = client.Database(mongoDatabase).Collection("animals")
 
 	return nil
 }
