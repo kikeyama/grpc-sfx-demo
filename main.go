@@ -157,9 +157,9 @@ func getAnimal(ctx context.Context, in *pb.AnimalId) (*pb.AnimalInfo, error) {
 
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			logger.Printf("level=info message=\"Document not found: %v\"", err)
-//			return &pbAnimal, status.Error(codes.NotFound, "document not found")
-			return &pbAnimal, nil
+			logger.Printf("level=error message=\"Document not found: %v\"", err)
+			return &pbAnimal, status.Error(codes.NotFound, "document not found")
+//			return &pbAnimal, nil
 		}
 		logger.Printf("level=error message\"failed to decode reuslt: %v\"", err)
 		return &pbAnimal, err
