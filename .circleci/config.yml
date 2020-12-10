@@ -1,5 +1,5 @@
 version: 2.1
-
+jobs:
   manifest_pull_request:
     docker:
       # specify the version you desire here
@@ -85,6 +85,7 @@ version: 2.1
           splunk_index: circleci
 
 orbs:
+  slack: circleci/slack@3.4.2
   signalfx: kikeyama/signalfx@0.1.1
   splunk: kikeyama/splunk@0.1.0
   aws-ecr: circleci/aws-ecr@6.12.2
